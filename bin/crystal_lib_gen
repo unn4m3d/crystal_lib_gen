@@ -15,13 +15,14 @@ begin
   Bundler.require(:default)
   require_relative '../lib/crystal_lib_gen'
 rescue LoadError => e
-  puts "Error: install llvm with clang support" 
-  puts
-  puts "Example:"
-  puts "brew install llvm --with-clang"
-  puts "brew link --force"
-  puts
+  puts e
+  puts e.backtrace.join("\n\t")
   exit
 end
 
+pwd = Dir.pwd
+Dir.chdir(File.dirname ARGV[0]) unless ENV['CLG_COMPAT']
+
 eval File.open(ARGV[0]).read
+
+Dir.chdir pwd
